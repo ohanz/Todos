@@ -1,16 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import {
-  createNativeStackNavigator,
-  NativeStackScreenProps,
-} from '@react-navigation/native-stack';
-import {View, Text, Button} from 'react-native';
+import {createNativeStackNavigator, NativeStackScreenProps,} from '@react-navigation/native-stack';
+import {View, Text, Button, StyleSheet} from 'react-native';
 
 type DetailsScreenParams = {id: string};
 
 type RootStackParamList = {
-  Home: undefined;
+  Splash: undefined;
+  Home: DetailsScreenParams;
   Details: DetailsScreenParams;
 };
 
@@ -22,11 +20,44 @@ declare global {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+const myStyles = StyleSheet.create({
+  tMargin: {
+    marginBottom: 30,
+  },
+  sMargin:{
+    marginBottom: 50, fontSize: 30, fontWeight: 'bold', color: 'green'
+  },
+  fMargin:{
+   fontSize: 18, fontWeight: 'bold'
+  }
+})
+
+function splashScreen(){
+  const navigation = useNavigation();
+  useEffect(() => {
+    setTimeout(() => {
+      navigation.navigate('Home', {id: '10s'}); // 10secs
+    }, 3000);
+  }, []);
+    
+  return (
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text style={myStyles.sMargin}>Todoz App</Text>
+      <Text style={myStyles.fMargin}>Your Everyday Assistant.</Text>
+      {/* <Button
+        title="Go to Details"
+        onPress={() => navigation.navigate('Details', {id: '1234'})}
+      /> */}
+    </View>
+  );
+}
+
 function HomeScreen() {
+
   const navigation = useNavigation();
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Home Screen</Text>
+      <Text style={myStyles.tMargin}>Home Screen</Text>
       <Button
         title="Go to Details"
         onPress={() => navigation.navigate('Details', {id: '1234'})}
@@ -42,7 +73,7 @@ function DetailsScreen({route}: DetailsScreenProps) {
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text>Details Screen</Text>
-      <Text>{id}</Text>
+      <Text>The values recieved: {id}</Text>
     </View>
   );
 }
@@ -51,6 +82,7 @@ function App(): JSX.Element {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+      <Stack.Screen name="Splash" component={splashScreen} />
         <Stack.Screen
           name="Home"
           component={HomeScreen}
