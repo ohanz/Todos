@@ -32,7 +32,7 @@ const myStyles = StyleSheet.create({
   }
 })
 
-function splashScreen(){
+function SplashScreen(){
   const navigation = useNavigation();
   useEffect(() => {
     setTimeout(() => {
@@ -82,11 +82,11 @@ function App(): JSX.Element {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      <Stack.Screen name="Splash" component={splashScreen} />
+      <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{title: 'Overview'}}
+          options={{title: 'Overview', headerShown: false}}
         />
         <Stack.Screen name="Details" component={DetailsScreen} />
       </Stack.Navigator>
