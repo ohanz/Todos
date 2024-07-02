@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator, NativeStackScreenProps,} from '@react-navigation/native-stack';
-import {View, Text, Button, StyleSheet} from 'react-native';
+import {View, Text, Button, StyleSheet, TouchableOpacity, SafeAreaView, TextInput} from 'react-native';
 
 type DetailsScreenParams = {id: string; age: number};
 
@@ -23,6 +23,50 @@ declare global {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const myStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    // justifyContent: 'center',
+    backgroundColor: '#ecf0f1',
+    // padding: 8,
+    // margin: 24,
+  },
+  containerView: {
+     padding: 8,
+    margin: 24,
+  },
+  SignHeader: {
+    alignItems: 'center'
+  },
+  inputView : {
+    gap : 15,
+    width : "100%",
+    paddingHorizontal : 40,
+    marginBottom  :5
+  },
+  input : {
+    height : 50,
+    paddingHorizontal : 20,
+    borderColor : "red",
+    borderWidth : 1,
+    borderRadius: 7
+  },
+  /* Here style the text of your button */
+  customBtnText: {
+    fontSize: 23,
+    textAlign:'center',
+    fontWeight: '400',
+    color: "#fff",
+},
+
+/* Here style the background of your button */
+customBtnBG: {
+backgroundColor: 'green',//"#007aff",
+// paddingHorizontal: 30,
+// paddingVertical: 5,
+borderRadius: 30,
+marginTop: 30,
+width: 300, height: 40
+},
   tMargin: {
     marginBottom: 30,
   },
@@ -67,41 +111,67 @@ function SplashScreen(){
 
 function SignInScreen() {
   const navigation = useNavigation();
+
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text style={myStyles.signInHeader}>Sign In Here</Text>
-      <Text style={myStyles.headerSub}>Enter Details To Sign-In Below: </Text>
-      <Button
+    <SafeAreaView style={myStyles.container} >
+     {/* style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}> */}
+     <View style={myStyles.containerView}>
+     <View style={myStyles.SignHeader}>
+     <Text style={myStyles.signInHeader}>Sign In Here</Text>
+     <Text style={myStyles.headerSub}>Enter Details To Sign-In Below: </Text>
+     <View style={myStyles.inputView}>
+            <TextInput style={myStyles.input} placeholder='EMAIL OR USERNAME' autoCorrect={false}
+        autoCapitalize='none' />
+            <TextInput style={myStyles.input} placeholder='PASSWORD'  autoCorrect={false}
+        autoCapitalize='none'/>
+        </View>
+     </View>
+      
+      {/* <Button
         title="Sign In Now"
         onPress={() => navigation.navigate('Home', {id: 'name', age: 45})}
-      />
+      /> */}
+       {/* Custom Button  */}
+        <TouchableOpacity
+          style={myStyles.customBtnBG}
+          onPress={() => navigation.navigate('Home', {id: 'name', age: 45})} 
+        >
+          <Text style={myStyles.customBtnText}>Sign In Now</Text>
+        </TouchableOpacity>
       <View style={{marginTop: 30}}>
         <Button
         title="Sign Up Instead"
         onPress={() => navigation.navigate('SignUp')}
       />
       </View>
-    </View>
+     </View>
+    </SafeAreaView>
   );
 }
 
 function SignUpScreen() {
   const navigation = useNavigation();
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    <SafeAreaView style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text style={myStyles.signInHeader}>Sign Up Here</Text>
       <Text style={myStyles.headerSub}>Enter Your Details Below: </Text>
-      <Button
+      {/* <Button
         title="Sign Up Now"
         onPress={() => navigation.navigate('Home', {id: 'name', age: 45})}
-      />
+      /> */}
+      <TouchableOpacity
+          style={myStyles.customBtnBG}
+          onPress={() => navigation.navigate('Home', {id: 'name', age: 45})} 
+        >
+          <Text style={myStyles.customBtnText}>Sign Up Now</Text>
+        </TouchableOpacity>
       <View style={{marginTop: 30}}>
         <Button
         title="Sign In Here"
         onPress={() => navigation.navigate('SignIn')}
       />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -109,13 +179,19 @@ function HomeScreen() {
 
   const navigation = useNavigation();
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    <SafeAreaView style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text style={myStyles.tMargin}>Home Screen</Text>
       <Button
         title="Go to Details"
         onPress={() => navigation.navigate('Details', {id: '1234', age: 20})}
       />
-    </View>
+      <View style={{marginTop: 50}}>
+      <Button
+        title="Log Out"
+        onPress={() => navigation.navigate('SignIn')}
+      />
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -124,10 +200,10 @@ type DetailsScreenProps = NativeStackScreenProps<RootStackParamList, 'Details'>;
 function DetailsScreen({route}: DetailsScreenProps) {
   const {id} = route.params;
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    <SafeAreaView style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text>Welcome To Your Profile Screen</Text>
       <Text>The values recieved: {id}</Text>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -136,8 +212,10 @@ function App(): JSX.Element {
     <NavigationContainer>
       <Stack.Navigator>
       <Stack.Screen name="Splash" component={SplashScreen} />
-      <Stack.Screen name="SignIn" component={SignInScreen}/>
-      <Stack.Screen name="SignUp" component={SignUpScreen}/>
+      <Stack.Screen name="SignIn" options={{title: 'Sign-In', headerShown: false}} 
+       component={SignInScreen}/>
+      <Stack.Screen name="SignUp" options={{title: 'Sign Up', headerShown: false}}
+       component={SignUpScreen}/>
         <Stack.Screen
           name="Home"
           component={HomeScreen}
